@@ -7,4 +7,5 @@ LEFT JOIN (
     FROM ecoli_data
 ) AS E2
 ON E.id = E2.parent_id
-GROUP BY E.id;
+GROUP BY E.id
+ORDER BY E.id;
