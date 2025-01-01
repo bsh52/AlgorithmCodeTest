@@ -1,8 +1,10 @@
-import java.util.*;
 class Solution {
     public int solution(String num_str) {
+        int answer = 0;
         String[] arr = num_str.split("");
-        int answer = Arrays.stream(arr).mapToInt(s -> Integer.parseInt(s)).sum();
+        for (String s : arr) {
+            answer += Integer.parseInt(s);
+        }
         return answer;
     }
 }
