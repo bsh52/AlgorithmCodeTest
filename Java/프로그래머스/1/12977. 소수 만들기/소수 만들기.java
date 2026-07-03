@@ -1,22 +1,30 @@
+import java.util.*;
 class Solution {
+    int answer;
+    int[] nums;
     public int solution(int[] nums) {
-        int n = nums.length;
-        int answer = 0;
-        int sum = 0;
-        for (int i = 0; i < n - 2; i++) {
-            for (int j = i + 1; j < n - 1; j++) {
-                for (int k = j + 1; k < n; k++) {
-                    sum = nums[i] + nums[j] + nums[k];
-                    if (isPrime(sum)) {
-                        answer++;
-                    }
-                }
-            }
-        }
+        this.nums = nums;
+        answer = 0;
+        dfs(0, 0, 0);
         return answer;
     }
-    
-    private static boolean isPrime(int num) {
+
+    private void dfs(int depth, int idx, int sum) {
+        if (depth == 3) {
+            if (isPrime(sum)) answer++;
+            return;
+        }
+
+        for (int i = idx; i < nums.length; i++) {
+            sum += nums[i];
+            dfs(depth + 1, i + 1, sum);
+            sum -= nums[i];
+        }
+    }
+
+    private boolean isPrime(int num) {
+        if (num <= 1 || num % 2 == 0) return false;
+        if (num == 2) return true;
         for (int i = 2; i * i <= num; i++) {
             if (num % i == 0) return false;
         }
