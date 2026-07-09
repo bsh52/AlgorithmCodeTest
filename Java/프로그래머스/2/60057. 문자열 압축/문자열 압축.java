@@ -1,46 +1,26 @@
 import java.util.*;
 class Solution {
     public int solution(String s) {
-        int answer = Integer.MAX_VALUE;
-        for (int i = 1; i <= (int) Math.ceil((double) s.length() / 2); i++) {
-            answer = Math.min(answer, getLength(s, i));
-        }
-        return answer;
-    }
+        int answer = s.length();
 
-    int getLength(String s, int size) {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < (int) Math.ceil((double) s.length() / size); i++) {
-            String str = "";
-            str += s.substring(i * size, Math.min((i + 1) * size, s.length()));
-            list.add(str);
-        }
-
-        List<String> result = new ArrayList<>();
-        int count = 1;
-        String temp = list.get(0);
-
-        if (list.size() == 1) {
-            result.add(temp);
-        } else {
-            for (int i = 1; i < list.size(); i++) {
-                if (temp.equals(list.get(i))) {
+        for (int i = 1; i <= s.length() / 2; i++) {
+            int len = 0;
+            for (int j = 0; j + i <= s.length(); j += i) {
+                int count = 1;
+                int next = j + i;
+                String sub = s.substring(j, j + i);
+                while (next + i <= s.length() && sub.equals(s.substring(next, next + i))) {
                     count++;
-                } else {
-                    result.add(count + temp);
-                    count = 1;
-                    temp = list.get(i);
+                    next += i;
                 }
-
-                if (i == list.size() - 1) {
-                    result.add(count + temp);
-                }
+                if (count == 1) len += i;
+                else len += i + String.valueOf(count).length();
+                j = next - i;
             }
+            len += s.length() % i;
+            answer = Math.min(answer, len);
         }
 
-        String ans = result.stream().reduce("", (a, b) -> a + b);
-        ans = ans.replaceAll("(?<!\\d)1(?!\\d)", "");
-
-        return ans.length();
+        return answer;
     }
 }
