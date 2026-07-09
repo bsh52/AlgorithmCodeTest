@@ -1,39 +1,35 @@
 class Solution {
     public int solution(int[] diffs, int[] times, long limit) {
         int answer = 0;
-        int n = diffs.length;
 
-        int min = 1;
-        int max = 0;
+        int left = 1;
+        int right = 0;
         for (int diff : diffs) {
-            max = Math.max(max, diff);
+            right = Math.max(right, diff);
         }
 
-        while (min < max) {
-            int level = (min + max) / 2;
-            long total = 0;
-            for (int i = 0; i < n; i++) {
+        while (left < right) {
+            int mid = (left + right) / 2;
+
+            long totalTime = 0;
+            for (int i = 0; i < diffs.length; i++) {
                 int diff = diffs[i];
-                int time = times[i];
-                int time_prev = 0;
-                if (i - 1 >= 0) {
-                    time_prev = times[i - 1];
-                }
-                if (diff <= level) {
-                    total += time;
-                } else {
-                    total += (long) (diff - level) * (time + time_prev) + time;
-                }
+                int time_cur = times[i];
+                int time_prev = i == 0 ? 0 : times[i - 1];
+
+                long difficult = diff - mid;
+                if (diff - mid < 0) difficult = 0;
+                totalTime += difficult * (time_cur + time_prev) + time_cur;
             }
 
-            if (total > limit) {
-                min = level + 1;
+            if (totalTime > limit) {
+                left = mid + 1;
             } else {
-                max = level;
+                right = mid;
             }
         }
+        answer = left;
 
-        answer = min;
         return answer;
     }
 }
